@@ -1,3 +1,5 @@
+from math import sqrt, atan
+
 import pygame
 
 from engine import *
@@ -12,6 +14,7 @@ class Chicken(Entity):
 		super().__init__(world)
 		self.x = 140
 		self.y = 140
+		self.shooting = False
 
 	def update(self, deltaTime):
 		if pygame.key.get_pressed()[pygame.K_LEFT]:
@@ -23,9 +26,20 @@ class Chicken(Entity):
 		screen.blit(image, (self.x, self.y))
 
 	def onEvent(self, event):
-		if event.type == pygame.MOUSEBUTTONUP:
-			if event.pos[0] > self.x and event.pos[1] > self.y and event.pos[0] < self.x + image.get_width() and event.pos[1] < self.y + image.get_height():
-				Egg(self.world, x = self.x + image.get_width() / 2, y = self.y + image.get_height(), vx = 0.1, vy = -0.3)
+		if self.shooting:
+			if event.type == pygame.MOUSEBUTTONUP:
+				self.shooting = False
+				pos1 = event.pos
+				pos2 = self.pos2
+				self.pos2 = None
+				vec = (pos2[0] - pos1[0], pos2[1] - pos1[1])
+				velocity = (vec[0] * 0.01, vec[1] * 0.01)
+				Egg(self.world, x = self.x + image.get_width() / 2, y = self.y + image.get_height() / 2, vx = velocity[0], vy = velocity[1])
+		else:
+			if event.type == pygame.MOUSEBUTTONDOWN:
+				if event.pos[0] > self.x and event.pos[1] > self.y and event.pos[0] < self.x + image.get_width() and event.pos[1] < self.y + image.get_height():
+					self.shooting = True
+					self.pos2 = event.pos
 
 class Egg(Entity):
 	def __init__(self, world, x, y, vx, vy):
@@ -40,7 +54,7 @@ class Egg(Entity):
 		self.y += self.vy * deltaTime
 		self.vy += 0.05
 
-		if not self.world.is_on_screen(self.x - image.get_width(), self.y - image.get_height(), self.x + image.get_width(), self.y + image.get_height()):
+		if not self.world.is_on_screen(self.x, self.y, self.x + image.get_width(), self.y + image.get_height()):
 			self.remove()
 
 	def draw(self, screen):

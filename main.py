@@ -7,7 +7,7 @@ from engine import *
 pygame.init()
 
 image = pygame.image.load("chicken.jpg")
-image = pygame.transform.scale(image, (80, 80))
+image = pygame.transform.smoothscale(image, (80, 80))
 
 class Chicken(Entity):
 	def __init__(self, world):

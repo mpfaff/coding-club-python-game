@@ -14,9 +14,9 @@ def load_image(name, width):
 	image = scale_maintain_aspect_ratio(image, width)
 	return image
 
-chicken_image = load_image("chicken.png", 130)
+chicken_image = load_image("chicken.png", 140)
 egg_image = load_image("egg.png", 30)
-mouse_image = load_image("mouse.png", 90)
+mouse_image = load_image("mouse.png", 80)
 
 class Chicken(Entity):
 	def __init__(self, world, x, y):

@@ -4,7 +4,7 @@ import pygame
 
 from engine import *
 
-pygame.init()
+world = World(1600, 1200)
 
 image = pygame.image.load("chicken.jpg")
 image = pygame.transform.smoothscale(image, (80, 80))
@@ -60,7 +60,6 @@ class Egg(Entity):
 	def draw(self, screen):
 		pygame.draw.circle(screen, 0x37e50e, (self.x, self.y), 20)
 
-world = World()
 chicken = Chicken(world)
 world.run()
 

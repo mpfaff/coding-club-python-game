@@ -6,8 +6,8 @@ from engine import *
 
 world = World(1600, 1200)
 
-image = pygame.image.load("chicken.jpg")
-image = pygame.transform.smoothscale(image, (80, 80))
+chicken_image = pygame.image.load("chicken.png").convert_alpha()
+chicken_image = pygame.transform.smoothscale(chicken_image, (120, 120))
 
 class Chicken(Entity):
 	def __init__(self, world):
@@ -23,7 +23,7 @@ class Chicken(Entity):
 			self.x += 0.5 * deltaTime
 
 	def draw(self, screen):
-		screen.blit(image, (self.x, self.y))
+		screen.blit(chicken_image, (self.x, self.y))
 
 	def onEvent(self, event):
 		if self.shooting:
@@ -34,10 +34,10 @@ class Chicken(Entity):
 				self.pos2 = None
 				vec = (pos2[0] - pos1[0], pos2[1] - pos1[1])
 				velocity = (vec[0] * 0.01, vec[1] * 0.01)
-				Egg(self.world, x = self.x + image.get_width() / 2, y = self.y + image.get_height() / 2, vx = velocity[0], vy = velocity[1])
+				Egg(self.world, x = self.x + chicken_image.get_width() / 2, y = self.y + chicken_image.get_height() / 2, vx = velocity[0], vy = velocity[1])
 		else:
 			if event.type == pygame.MOUSEBUTTONDOWN:
-				if event.pos[0] > self.x and event.pos[1] > self.y and event.pos[0] < self.x + image.get_width() and event.pos[1] < self.y + image.get_height():
+				if event.pos[0] > self.x and event.pos[1] > self.y and event.pos[0] < self.x + chicken_image.get_width() and event.pos[1] < self.y + chicken_image.get_height():
 					self.shooting = True
 					self.pos2 = event.pos
 

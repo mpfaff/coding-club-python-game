@@ -54,6 +54,7 @@ class Egg(Entity):
 		self.y += self.vy * deltaTime
 		self.vy += 0.05
 
+		# FIXME: the size used here is wrong and it also should not remove the egg when it goes above the screen.
 		if not self.world.is_on_screen(self.x, self.y, self.x + image.get_width(), self.y + image.get_height()):
 			self.remove()
 

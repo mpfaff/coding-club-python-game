@@ -63,18 +63,37 @@ class Egg(Entity):
 		if self.__is_off_screen_forever():
 			self.remove()
 
+		for entity in self.world.entities:
+			if entity is self:
+				# don't collide with ourself
+				continue
+			if not isinstance(entity, Mouse):
+				# we only collide with mice
+				continue
+			if self.minX() < entity.maxX() and self.maxX() >= entity.minX():
+				if self.minY() < entity.maxY() and self.maxY() >= entity.minY():
+					print('You did it!')
+					self.remove()
+					entity.remove()
+					break
+
 	def draw(self, screen):
 		screen.blit(egg_image, (self.x, self.y))
 
+	def minX(self):
+		return self.x
+	def minY(self):
+		return self.y
+	def maxX(self):
+		return self.x + egg_image.get_width()
+	def maxY(self):
+		return self.y + egg_image.get_height()
+
 	def __is_off_screen_forever(self):
-		minX = self.x
-		minY = self.y
-		maxX = self.x + egg_image.get_width()
-		maxY = self.y + egg_image.get_height()
-		if minX > self.world.screen.get_width() or maxX < 0:
+		if self.minX() > self.world.screen.get_width() or self.maxX() < 0:
 			return True
 		# maxY < 0 is left out because gravity will bring it back down
-		if minY > self.world.screen.get_height():
+		if self.minY() > self.world.screen.get_height():
 			return True
 		return False
 
@@ -87,6 +106,15 @@ class Mouse(Entity):
 	def draw(self, screen):
 		# I'm not sure why the special flag is required here. Might be image-dependent.
 		screen.blit(mouse_image, (self.x, self.y), special_flags=pygame.BLEND_ALPHA_SDL2)
+
+	def minX(self):
+		return self.x
+	def minY(self):
+		return self.y
+	def maxX(self):
+		return self.x + mouse_image.get_width()
+	def maxY(self):
+		return self.y + mouse_image.get_height()
 
 chicken = Chicken(world, 300, 700)
 Mouse(world, 1240, 400)

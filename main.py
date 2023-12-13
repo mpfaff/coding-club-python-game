@@ -57,11 +57,23 @@ class Egg(Entity):
 		self.y += self.vy * deltaTime
 		self.vy += 0.05
 
-		if not self.world.is_on_screen(self.x, self.y, self.x + image.get_width(), self.y + image.get_height()):
+		if self.__is_off_screen_forever():
 			self.remove()
 
 	def draw(self, screen):
 		screen.blit(egg_image, (self.x, self.y), special_flags=pygame.BLEND_ALPHA_SDL2)
+
+	def __is_off_screen_forever(self):
+		minX = self.x
+		minY = self.y
+		maxX = self.x + egg_image.get_width()
+		maxY = self.y + egg_image.get_height()
+		if minX > self.world.screen.get_width() or maxX < 0:
+			return True
+		# maxY < 0 is left out because gravity will bring it back down
+		if minY > self.world.screen.get_height():
+			return True
+		return False
 
 chicken = Chicken(world)
 world.run()

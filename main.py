@@ -61,7 +61,7 @@ class Egg(Entity):
 			self.remove()
 
 	def draw(self, screen):
-		screen.blit(egg_image, (self.x, self.y), special_flags=pygame.BLEND_ALPHA_SDL2)
+		screen.blit(egg_image, (self.x, self.y))
 
 	def __is_off_screen_forever(self):
 		minX = self.x

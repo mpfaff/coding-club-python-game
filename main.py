@@ -6,17 +6,20 @@ from engine import *
 
 world = World(1600, 1200)
 
-chicken_image = pygame.image.load("chicken.png").convert_alpha()
-chicken_image = pygame.transform.smoothscale(chicken_image, (120, 120))
+def load_image(name, width, height):
+	image = pygame.image.load(name).convert_alpha()
+	image = pygame.transform.smoothscale(image, (width, height))
+	return image
 
-egg_image = pygame.image.load("egg.png").convert_alpha()
-egg_image = pygame.transform.smoothscale(egg_image, (40, 40))
+chicken_image = load_image("chicken.png", 120, 120)
+egg_image = load_image("egg.png", 40, 40)
+mouse_image = load_image("mouse.png", 100, 100)
 
 class Chicken(Entity):
-	def __init__(self, world):
+	def __init__(self, world, x, y):
 		super().__init__(world)
-		self.x = 140
-		self.y = 140
+		self.x = x
+		self.y = y
 		self.shooting = False
 
 	def update(self, deltaTime):
@@ -75,6 +78,17 @@ class Egg(Entity):
 			return True
 		return False
 
-chicken = Chicken(world)
+class Mouse(Entity):
+	def __init__(self, world, x, y):
+		super().__init__(world)
+		self.x = x
+		self.y = y
+
+	def draw(self, screen):
+		# I'm not sure why the special flag is required here. Might be image-dependent.
+		screen.blit(mouse_image, (self.x, self.y), special_flags=pygame.BLEND_ALPHA_SDL2)
+
+chicken = Chicken(world, 300, 700)
+Mouse(world, 1240, 400)
 world.run()
 

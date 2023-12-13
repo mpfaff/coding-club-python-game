@@ -13,7 +13,7 @@ class Chicken(Entity):
 	def __init__(self, world):
 		super().__init__(world)
 		self.x = 140
-		self.y = 140
+		self.y = 450
 		self.shooting = False
 
 	def update(self, deltaTime):
@@ -34,12 +34,21 @@ class Chicken(Entity):
 				self.pos2 = None
 				vec = (pos2[0] - pos1[0], pos2[1] - pos1[1])
 				velocity = (vec[0] * 0.01, vec[1] * 0.01)
-				Egg(self.world, x = self.x + image.get_width() / 2, y = self.y + image.get_height() / 2, vx = velocity[0], vy = velocity[1])
+				Egg(self.world, x = self.x + image.get_width() / 2, y = self.y + image.get_height() / 2 - 200, vx = velocity[0], vy = velocity[1])
 		else:
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.pos[0] > self.x and event.pos[1] > self.y and event.pos[0] < self.x + image.get_width() and event.pos[1] < self.y + image.get_height():
 					self.shooting = True
 					self.pos2 = event.pos
+
+	def minX(self):
+		return self.x
+	def minY(self):
+		return self.y
+	def maxX(self):
+		return self.x + image.get_width()
+	def maxY(self):
+		return self.y + image.get_height()
 
 class Egg(Entity):
 	def __init__(self, world, x, y, vx, vy):
@@ -58,8 +67,31 @@ class Egg(Entity):
 		if not self.world.is_on_screen(self.x, self.y, self.x + image.get_width(), self.y + image.get_height()):
 			self.remove()
 
+		for entity in self.world.entities:
+			if entity is self:
+				# don't collide with ourself
+				continue
+			if not isinstance(entity, Chicken):
+				# we only collide with chickens
+				continue
+			if self.minX() < entity.maxX() and self.maxX() >= entity.minX():
+				if self.minY() < entity.maxY() and self.maxY() >= entity.minY():
+					print('You did it!')
+					self.remove()
+					entity.remove()
+					break
+
 	def draw(self, screen):
 		pygame.draw.circle(screen, 0x37e50e, (self.x, self.y), 20)
+
+	def minX(self):
+		return self.x
+	def minY(self):
+		return self.y
+	def maxX(self):
+		return self.x + 20 * 2
+	def maxY(self):
+		return self.y + 20 * 2
 
 world = World()
 chicken = Chicken(world)

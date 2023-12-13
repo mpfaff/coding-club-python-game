@@ -43,7 +43,13 @@ class Chicken(Entity):
 				self.pos2 = None
 				vec = (pos2[0] - pos1[0], pos2[1] - pos1[1])
 				velocity = (vec[0] * 0.01, vec[1] * 0.01)
-				Egg(self.world, x = self.x + chicken_image.get_width() / 2, y = self.y + chicken_image.get_height() / 2, vx = velocity[0], vy = velocity[1])
+				Egg(
+					self.world,
+					x = self.x + chicken_image.get_width() / 2 - egg_image.get_width() / 2,
+					y = self.y + chicken_image.get_height() / 2 - egg_image.get_height() / 2,
+					vx = velocity[0],
+					vy = velocity[1]
+				)
 		else:
 			if event.type == pygame.MOUSEBUTTONDOWN:
 				if event.pos[0] > self.x and event.pos[1] > self.y and event.pos[0] < self.x + chicken_image.get_width() and event.pos[1] < self.y + chicken_image.get_height():

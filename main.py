@@ -9,6 +9,9 @@ world = World(1600, 1200)
 chicken_image = pygame.image.load("chicken.png").convert_alpha()
 chicken_image = pygame.transform.smoothscale(chicken_image, (120, 120))
 
+egg_image = pygame.image.load("egg.png").convert_alpha()
+egg_image = pygame.transform.smoothscale(egg_image, (40, 40))
+
 class Chicken(Entity):
 	def __init__(self, world):
 		super().__init__(world)
@@ -58,7 +61,7 @@ class Egg(Entity):
 			self.remove()
 
 	def draw(self, screen):
-		pygame.draw.circle(screen, 0x37e50e, (self.x, self.y), 20)
+		screen.blit(egg_image, (self.x, self.y), special_flags=pygame.BLEND_ALPHA_SDL2)
 
 chicken = Chicken(world)
 world.run()

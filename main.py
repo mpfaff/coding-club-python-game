@@ -6,14 +6,17 @@ from engine import *
 
 world = World(1600, 1200)
 
-def load_image(name, width, height):
+def scale_maintain_aspect_ratio(image, width):
+	return pygame.transform.smoothscale(image, (width, int(image.get_height() / image.get_width() * width)))
+
+def load_image(name, width):
 	image = pygame.image.load(name).convert_alpha()
-	image = pygame.transform.smoothscale(image, (width, height))
+	image = scale_maintain_aspect_ratio(image, width)
 	return image
 
-chicken_image = load_image("chicken.png", 120, 120)
-egg_image = load_image("egg.png", 40, 40)
-mouse_image = load_image("mouse.png", 100, 100)
+chicken_image = load_image("chicken.png", 130)
+egg_image = load_image("egg.png", 30)
+mouse_image = load_image("mouse.png", 90)
 
 class Chicken(Entity):
 	def __init__(self, world, x, y):
